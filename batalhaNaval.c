@@ -3,104 +3,106 @@
 // Desafio Batalha Naval - MateCheck
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
+
 #define TAM_TABULEIRO 10
 #define TAM_NAVIO 3
+#define AGUA 0
+#define NAVIO 3
 
 int main() {
     // Nível Novato - Posicionamento dos Navios
     // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
     // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
     // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+
+     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
+    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
+    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
+    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+
+   
        /* ===============================
        REPRESENTAÇÃO DO TABULEIRO
        =============================== */
 
+    
     int tabuleiro[TAM_TABULEIRO][TAM_TABULEIRO];
 
-    // Inicializa o tabuleiro com 0 (água)
-    for (int linha = 0; linha < TAM_TABULEIRO; linha++) {
-        for (int coluna = 0; coluna < TAM_TABULEIRO; coluna++) {
-            tabuleiro[linha][coluna] = 0;
+    // ---------- Inicializa o tabuleiro ----------
+    for (int i = 0; i < TAM_TABULEIRO; i++) {
+        for (int j = 0; j < TAM_TABULEIRO; j++) {
+            tabuleiro[i][j] = AGUA;
         }
     }
 
-    /* ===============================
-       DECLARAÇÃO DOS NAVIOS
-       =============================== */
-
+    // ==========================================
+    // NAVIOS (vetores unidimensionais)
+    // ==========================================
     int navioHorizontal[TAM_NAVIO] = {3, 3, 3};
     int navioVertical[TAM_NAVIO]   = {3, 3, 3};
+    int navioDiagonal1[TAM_NAVIO]  = {3, 3, 3};
+    int navioDiagonal2[TAM_NAVIO]  = {3, 3, 3};
 
-    /* ===============================
-       COORDENADAS INICIAIS
-       =============================== */
-
-    // Navio horizontal
-    int linhaH = 2;
+    // ---------- Navio Horizontal ----------
+    int linhaH = 5;
     int colunaH = 3;
 
-    // Navio vertical
-    int linhaV = 5;
-    int colunaV = 6;
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        if (colunaH + i < TAM_TABULEIRO &&
+            tabuleiro[linhaH][colunaH + i] == AGUA) {
 
-    /* ===============================
-       POSICIONAMENTO DO NAVIO HORIZONTAL
-       =============================== */
-
-    // Validação de limites
-    if (colunaH + TAM_NAVIO <= TAM_TABULEIRO) {
-
-        // Verifica sobreposição
-        int podePosicionar = 1;
-        for (int i = 0; i < TAM_NAVIO; i++) {
-            if (tabuleiro[linhaH][colunaH + i] != 0) {
-                podePosicionar = 0;
-            }
-        }
-
-        // Posiciona o navio
-        if (podePosicionar) {
-            for (int i = 0; i < TAM_NAVIO; i++) {
-                tabuleiro[linhaH][colunaH + i] = navioHorizontal[i];
-            }
+            tabuleiro[linhaH][colunaH + i] = navioHorizontal[i];
         }
     }
 
-    /* ===============================
-       POSICIONAMENTO DO NAVIO VERTICAL
-       =============================== */
+    // ---------- Navio Vertical ----------
+    int linhaV = 6;
+    int colunaV = 8;
 
-    // Validação de limites
-    if (linhaV + TAM_NAVIO <= TAM_TABULEIRO) {
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        if (linhaV + i < TAM_TABULEIRO &&
+            tabuleiro[linhaV + i][colunaV] == AGUA) {
 
-        // Verifica sobreposição
-        int podePosicionar = 1;
-        for (int i = 0; i < TAM_NAVIO; i++) {
-            if (tabuleiro[linhaV + i][colunaV] != 0) {
-                podePosicionar = 0;
-            }
-        }
-
-        // Posiciona o navio
-        if (podePosicionar) {
-            for (int i = 0; i < TAM_NAVIO; i++) {
-                tabuleiro[linhaV + i][colunaV] = navioVertical[i];
-            }
+            tabuleiro[linhaV + i][colunaV] = navioVertical[i];
         }
     }
 
-    /* ===============================
-       EXIBIÇÃO DO TABULEIRO
-       =============================== */
+    // ---------- Navio Diagonal Principal (↘) ----------
+    int linhaD1 = 0;
+    int colunaD1 = 0;
 
-    printf("TABULEIRO DE BATALHA NAVAL (10x10)\n\n");
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        if (linhaD1 + i < TAM_TABULEIRO &&
+            colunaD1 + i < TAM_TABULEIRO &&
+            tabuleiro[linhaD1 + i][colunaD1 + i] == AGUA) {
 
-    for (int linha = 0; linha < TAM_TABULEIRO; linha++) {
-        for (int coluna = 0; coluna < TAM_TABULEIRO; coluna++) {
-            printf("%d ", tabuleiro[linha][coluna]);
+            tabuleiro[linhaD1 + i][colunaD1 + i] = navioDiagonal1[i];
+        }
+    }
+
+    // ---------- Navio Diagonal Secundária (↙) ----------
+    int linhaD2 = 0;
+    int colunaD2 = TAM_TABULEIRO - 1;
+
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        if (linhaD2 + i < TAM_TABULEIRO &&
+            colunaD2 - i >= 0 &&
+            tabuleiro[linhaD2 + i][colunaD2 - i] == AGUA) {
+
+            tabuleiro[linhaD2 + i][colunaD2 - i] = navioDiagonal2[i];
+        }
+    }
+
+    // ---------- Exibição do Tabuleiro ----------
+    printf("TABULEIRO BATALHA NAVAL\n\n");
+
+    for (int i = 0; i < TAM_TABULEIRO; i++) {
+        for (int j = 0; j < TAM_TABULEIRO; j++) {
+            printf("%d ", tabuleiro[i][j]);
         }
         printf("\n");
     }
+
 
 
     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
